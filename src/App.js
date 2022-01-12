@@ -5,12 +5,14 @@ import UncategorizedBudgetCard from './components/UncategorizedBudgetCard'
 import TotalBudgetCard from './components/TotalBudgetCard'
 import AddBudgetModal from './components/AddBudgetModal'
 import AddExpenseModal from './components/AddExpenseModal'
+import ViewExpensesModal from './components/ViewExpensesModal'
 import { useState } from 'react'
-import { useBudgets } from './contexts/BudgetsContexts';
+import { UNCATEGORIZED_BUDGET_ID, useBudgets } from './contexts/BudgetsContexts';
 
 function App() {
   const [showAddBudgetModal, setShowAddBudgetModal] = useState(false)
   const [showAddExpenseModal, setShowAddExpenseModal] = useState(false)
+  const [showViewExpensesModalBudgetId, setShowViewExpensesModalBudgetId] = useState()
   const [addExpenseModalBudgetId, setAddExpenseModalBudgetId] = useState()
   const { budgets, getBudgetExpenses} = useBudgets()
 
@@ -37,16 +39,18 @@ function App() {
             amount={amount} 
             max={budget.max} 
             onAddExpenseClick={() => openAddExpenseModal(budget.id)}
+            onViewExpensesClick={() => setShowViewExpensesModalBudgetId(budget.id)}
             />
             )
             })}
-          <UncategorizedBudgetCard onAddExpenseClick={openAddExpenseModal}/>
+          <UncategorizedBudgetCard onAddExpenseClick={openAddExpenseModal} onViewExpensesClick={() => setShowViewExpensesModalBudgetId(UNCATEGORIZED_BUDGET_ID)}/>
           <TotalBudgetCard />
         </div>
       </Container>
       <AddBudgetModal show={showAddBudgetModal} handleClose={() => setShowAddBudgetModal(false)}/>
-      <AddExpenseModal defaultBudgetId={addExpenseModalBudgetId} show={showAddExpenseModal} handleClose={() => setShowAddExpenseModal(false)}
-      />
+      <AddExpenseModal defaultBudgetId={addExpenseModalBudgetId} show={showAddExpenseModal} handleClose={() => setShowAddExpenseModal(false)}/>
+      <ViewExpensesModal budgetId={showViewExpensesModalBudgetId} handleClose={() => setShowViewExpensesModalBudgetId()}/>
+      
     </>
   );
 }
